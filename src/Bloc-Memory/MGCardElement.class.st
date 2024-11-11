@@ -1366,13 +1366,57 @@ MGCardElement >> initializeFrontElement [
 	frontElement := BlTextElement new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'announcement - handling' }
 MGCardElement >> onDisappear [
 	"nothing for now"
 	"self opacity: 0"
-	self visibility: BlVisibility hidden
+	"self visibility: BlVisibility hidden"
+	| vanish enlarge minimize disappear |
+	enlarge := BlTransformAnimation scale: 1.15 @ 1.15.
+	enlarge
+		absolute;
+		easing: BlEasing bounceOut;
+		duration: 0.5 seconds.
+	vanish := BlOpacityAnimation new
+		          opacity: 0;
+		          duration: 0.35 seconds.
+	minimize := BlTransformAnimation scale: 0.01 @ 0.01.
+	minimize
+		absolute;
+		easing: BlEasing linear;
+		duration: 0.35 seconds.
+	disappear := BlParallelAnimation withAll: {
+			             vanish.
+			             minimize }.
+	self addAnimation: (BlSequentialAnimation withAll: {
+				 enlarge.
+				 disappear })
+]
 
-	
+{ #category : 'announcement - handling' }
+MGCardElement >> onFlippedBack [
+
+	| animation |
+	animation := BlTransformAnimation scale: 1 @ 1.
+	animation
+		absolute;
+		easing: BlEasing bounceOut;
+		duration: 0.35 seconds.
+	self addAnimation: animation.
+	self showBackFace
+]
+
+{ #category : 'announcement - handling' }
+MGCardElement >> onFlippedFace [
+
+	| animation |
+	animation := BlTransformAnimation scale: 0.85 @ 0.85.
+	animation
+		absolute;
+		easing: BlQuinticInterpolator default;
+		duration: 0.6 seconds.
+	self addAnimation: animation.
+	self showFrontFace
 ]
 
 { #category : 'paint' }
@@ -1385,9 +1429,12 @@ MGCardElement >> showBackFace [
 { #category : 'paint' }
 MGCardElement >> showCardFace [
 
-	card isFlipped
+	"card isFlipped
 		ifTrue: [ self showFrontFace ]
-		ifFalse: [ self showBackFace ]
+		ifFalse: [ self showBackFace ]"
+	card isFlipped
+		ifTrue: [ self onFlippedFace ]
+		ifFalse: [ self onFlippedBack ]
 ]
 
 { #category : 'paint' }

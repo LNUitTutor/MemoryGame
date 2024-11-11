@@ -18,7 +18,7 @@ MGGameElement class >> openWithNumber [
 		                yourself.
 	space := BlSpace new.
 	space root addChild: aGameElement.
-	space title: 'Memory Game'.
+	space title: 'Memory Game'; setPosition: 50 @ 100.
 	space root whenLayoutedDoOnce: [ space extent: aGameElement size ].
 	space show
 ]
