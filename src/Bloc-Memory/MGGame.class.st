@@ -10,6 +10,13 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'instance creation' }
+MGGame class >> withNumbers [
+
+	<sampleInstance>
+	^ self new initializeForSymbols: '12345678'
+]
+
 { #category : 'accessing' }
 MGGame >> availableCards [
 
