@@ -27,7 +27,7 @@ MGCard >> disappear [
 MGCard >> flip [
 
 	flipped := flipped not.
-	self notifĀFlipped
+	self notifyFlipped
 ]
 
 { #category : 'initialization' }
