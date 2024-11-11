@@ -1296,13 +1296,24 @@ MGCardElement >> card: aMgCard [
 
 	card := aMgCard.
 	self fillUpFrontElement.
-	self showCardFace
+	self showCardFace.
+
+	card announcer
+		when: MGCardFlippedAnnouncement send: #showCardFace to: self;
+		when: MGCardDisappearAnnouncement send: #onDisappear to: self
 ]
 
 { #category : 'constants' }
 MGCardElement >> cardExtent [
 
 	^ 80 @ 80
+]
+
+{ #category : 'public' }
+MGCardElement >> click [
+
+	"self parent memoryGame chooseCard: self card.
+	self showCardFace"
 ]
 
 { #category : 'paint' }
@@ -1336,7 +1347,8 @@ MGCardElement >> initialize [
 	self layout: BlLinearLayout new alignCenter.
 	self background: self backgroundPaint.
 	self geometry: (BlRoundedRectangleGeometry cornerRadius: 12).
-	self card: (MGCard new symbol: $a)
+	self card: (MGCard new symbol: $a).
+	"self addEventHandlerOn: BlClickEvent do: [ :anEvent | self click ]"
 ]
 
 { #category : 'initialization' }
@@ -1352,6 +1364,15 @@ MGCardElement >> initializeBackElement [
 MGCardElement >> initializeFrontElement [
 
 	frontElement := BlTextElement new
+]
+
+{ #category : 'as yet unclassified' }
+MGCardElement >> onDisappear [
+	"nothing for now"
+	"self opacity: 0"
+	self visibility: BlVisibility hidden
+
+	
 ]
 
 { #category : 'paint' }

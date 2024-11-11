@@ -18,6 +18,7 @@ MGGameElement class >> openWithNumber [
 		                yourself.
 	space := BlSpace new.
 	space root addChild: aGameElement.
+	space title: 'Memory Game'.
 	space root whenLayoutedDoOnce: [ space extent: aGameElement size ].
 	space show
 ]
@@ -42,8 +43,15 @@ MGGameElement >> memoryGame [
 { #category : 'accessing' }
 MGGameElement >> memoryGame: aGameModel [
 
+	| aCardEventListener |
 	memoryGame := aGameModel.
+	aCardEventListener := MGCardEventListener new
+		                      memoryGame: aGameModel;
+		                      yourself.
 	self layout columnCount: memoryGame gridSize.
 	memoryGame availableCards do: [ :aCard |
-		self addChild: (MGCardElement new card: aCard) ]
+		self addChild: (MGCardElement new
+				 card: aCard;
+				 addEventHandler: aCardEventListener;
+				 yourself) ]
 ]
